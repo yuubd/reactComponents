@@ -52,3 +52,23 @@ body {
         }
     }
 }
+
+.show {
+    display: block;
+    transition: 0.3s linear;
+}
+
+#reaction {
+    @include size(35px, 20px);
+    position: absolute;
+    left: 48%;
+    top: 70%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 18px;
+    &:hover {
+        background: #b3b3ff;
+        cursor: pointer;
+
+    }
+}

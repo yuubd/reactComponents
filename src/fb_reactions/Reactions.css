@@ -40,3 +40,20 @@ body {
       opacity: 1;
       font-size: 14px;
       font-weight: lighter; }
+
+.show {
+  display: block;
+  transition: 0.3s linear; }
+
+#reaction {
+  width: 35px;
+  height: 20px;
+  position: absolute;
+  left: 48%;
+  top: 70%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 18px; }
+  #reaction:hover {
+    background: #b3b3ff;
+    cursor: pointer; }

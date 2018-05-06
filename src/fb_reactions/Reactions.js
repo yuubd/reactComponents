@@ -6,32 +6,37 @@ import like from './public/facebook-like.svg'
 import love from './public/facebook-love.svg'
 import sad from './public/facebook-sad.svg'
 import wow from './public/facebook-wow.svg'
+import Circle from './Circle'
 
 
 class Reactions extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {like: true};
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick = () => {
+    this.setState(prevState => ({
+      like: !prevState.like
+    }));
+  }
+
   render() {
     return (
       <body>
         <div className="wrap">
-          <div className="circle"><img src={like} alt="logo"/>
-            <p>like</p>
-          </div>
-          <div className="circle"><img src={love} alt="logo"/>
-            <p>love</p>
-          </div>
-          <div className="circle"><img src={haha} alt="logo"/>
-            <p>haha</p>
-          </div>
-          <div className="circle"><img src={wow} alt="logo"/>
-            <p>wow</p>
-          </div>
-          <div className="circle"><img src={sad} alt="logo"/>
-            <p>sad</p>
-          </div>
-          <div className="circle"><img src={angry} alt="logo"/>
-            <p>angry</p>
-          </div>
+          <Circle source={like} name='like'/>
+          <Circle source={love} name='love'/>
+          <Circle source={haha} name='haha'/>
+          <Circle source={wow} name='wow'/>
+          <Circle source={sad} name='sad'/>
+          <Circle source={angry} name='angry'/>
         </div>
+        <p id="reaction" onClick={this.handleClick}>
+          {this.state.like ? 'like' : 'dislike'}
+        </p>
       </body>
     );
   }
