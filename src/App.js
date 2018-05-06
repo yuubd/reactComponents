@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Reactions from './fb_reactions/Reactions'
+import Calculator from './calculator/Calculator'
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
         </header>
         <p className="App-intro">
           <Reactions/>
+          <Calculator/>
         </p>
       </div>
     );
