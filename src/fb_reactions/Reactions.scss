@@ -11,6 +11,20 @@ body {
     height: $height;
 }
 
+.anim{
+    animation: slide .3s;
+    @keyframes slide {
+        0%{
+            opacity: 0;
+            margin-top: 40px;
+        }
+        100%{
+            opacity: 1;
+            margin-top: 15px;
+        }
+    }
+}
+
 .wrap {
     background: #fff;
     @include size(450px, 90px);
@@ -33,6 +47,11 @@ body {
         &:first-child{
             margin-left: 20px;
         }
+        @for $i from 1 through 6 {
+            &:nth-child(#{$i}){
+                @extend .anim;
+            }
+        }
         img {
             width: 100%;
         }
@@ -53,8 +72,8 @@ body {
     }
 }
 
-.show {
-    display: block;
+.hide {
+    display: none;
     transition: 0.3s linear;
 }
 
@@ -67,7 +86,6 @@ body {
     color: #fff;
     font-size: 18px;
     &:hover {
-        background: #b3b3ff;
         cursor: pointer;
 
     }

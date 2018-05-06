@@ -12,21 +12,21 @@ import Circle from './Circle'
 class Reactions extends Component {
   constructor(props) {
     super(props);
-    this.state = {like: true};
+    this.state = {show: false};
 
-    this.handleClick = this.handleClick.bind(this);
+    this.toggleClass = this.toggleClass.bind(this);
   }
 
-  handleClick = () => {
+  toggleClass = () => {
     this.setState(prevState => ({
-      like: !prevState.like
+      show: !prevState.show
     }));
   }
 
   render() {
     return (
       <body>
-        <div className="wrap">
+        <div className={this.state.show? 'wrap' : 'hide'}>
           <Circle source={like} name='like'/>
           <Circle source={love} name='love'/>
           <Circle source={haha} name='haha'/>
@@ -34,8 +34,8 @@ class Reactions extends Component {
           <Circle source={sad} name='sad'/>
           <Circle source={angry} name='angry'/>
         </div>
-        <p id="reaction" onClick={this.handleClick}>
-          {this.state.like ? 'like' : 'dislike'}
+        <p id="reaction" onClick={this.toggleClass}>
+          Like
         </p>
       </body>
     );

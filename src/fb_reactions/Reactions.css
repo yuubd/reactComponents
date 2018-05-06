@@ -4,6 +4,17 @@
 body {
   background: #558cff; }
 
+.anim, .wrap .circle:nth-child(1), .wrap .circle:nth-child(2), .wrap .circle:nth-child(3), .wrap .circle:nth-child(4), .wrap .circle:nth-child(5), .wrap .circle:nth-child(6) {
+  animation: slide .3s; }
+
+@keyframes slide {
+  0% {
+    opacity: 0;
+    margin-top: 40px; }
+  100% {
+    opacity: 1;
+    margin-top: 15px; } }
+
 .wrap {
   background: #fff;
   width: 450px;
@@ -41,8 +52,8 @@ body {
       font-size: 14px;
       font-weight: lighter; }
 
-.show {
-  display: block;
+.hide {
+  display: none;
   transition: 0.3s linear; }
 
 #reaction {
@@ -55,5 +66,4 @@ body {
   color: #fff;
   font-size: 18px; }
   #reaction:hover {
-    background: #b3b3ff;
     cursor: pointer; }
