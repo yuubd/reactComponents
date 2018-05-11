@@ -25,7 +25,7 @@ class Reactions extends Component {
 
   render() {
     return (
-      <body>
+      <div className='reactions-main'>
         <div className={this.state.show? 'wrap' : 'hide'}>
           <Circle source={like} name='like'/>
           <Circle source={love} name='love'/>
@@ -37,7 +37,7 @@ class Reactions extends Component {
         <p id="reaction" onClick={this.toggleClass}>
           Like
         </p>
-      </body>
+      </div>
     );
   }
 }

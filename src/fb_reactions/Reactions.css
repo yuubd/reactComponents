@@ -1,7 +1,11 @@
 * {
   box-sizing: border-box; }
 
-body {
+.reactions-main {
+  position: relative;
+  margin: auto;
+  width: 500px;
+  height: 200px;
   background: #558cff; }
 
 .anim, .wrap .circle:nth-child(1), .wrap .circle:nth-child(2), .wrap .circle:nth-child(3), .wrap .circle:nth-child(4), .wrap .circle:nth-child(5), .wrap .circle:nth-child(6) {
@@ -22,7 +26,7 @@ body {
   border-radius: 60px;
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 5%;
   transform: translate(-50%, 50%);
   box-shadow: 0 5px 40px -20px shade(#000, 40%); }
   .wrap .circle {
@@ -59,9 +63,9 @@ body {
 #reaction {
   width: 35px;
   height: 20px;
-  position: absolute;
-  left: 48%;
-  top: 70%;
+  position: relative;
+  left: 50%;
+  top: 85%;
   transform: translate(-50%, -50%);
   color: #fff;
   font-size: 18px; }

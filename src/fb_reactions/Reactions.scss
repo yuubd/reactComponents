@@ -2,13 +2,16 @@
     box-sizing: border-box;
 }
 
-body {
-    background: #558cff;
-}
-
 @mixin size ($width, $height){
     width: $width;
     height: $height;
+}
+
+.reactions-main {
+    position: relative;
+    margin: auto;
+    @include size(500px, 200px);
+    background: #558cff;
 }
 
 .anim{
@@ -31,7 +34,7 @@ body {
     border-radius: 60px;
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 5%;
     transform: translate(-50%, 50%);
     box-shadow: 0 5px 40px -20px shade(#000, 40%);
     .circle{
@@ -79,14 +82,13 @@ body {
 
 #reaction {
     @include size(35px, 20px);
-    position: absolute;
-    left: 48%;
-    top: 70%;
+    position: relative;
+    left: 50%;
+    top: 85%;
     transform: translate(-50%, -50%);
     color: #fff;
     font-size: 18px;
     &:hover {
         cursor: pointer;
-
     }
 }

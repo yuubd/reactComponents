@@ -12,10 +12,10 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo"/>
           <h1 className="App-title">React Components</h1>
         </header>
-        <p className="App-intro">
-          <Reactions/>
-          <Calculator/>
-        </p>
+        <div className="App-intro">
+          <Reactions className="reactions"/>
+          <Calculator className="calculator"/>
+        </div>
       </div>
     );
   }
