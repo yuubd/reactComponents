@@ -10,7 +10,7 @@ class Calculator extends Component {
   }
 
   onClickDigit = (digit) => {
-    const {expression, waitingForOperand, result} = this.state
+    const {expression, waitingForOperand} = this.state
     if (waitingForOperand){
       this.setState({
         expression: String(digit),
@@ -19,7 +19,7 @@ class Calculator extends Component {
     }
     else{
       this.setState({
-        expression: expression === '0' ? String(digit) : result ? String(digit) : expression + String(digit)
+        expression: expression === '0' ? String(digit) : expression + String(digit)
       })
     }
 
@@ -85,7 +85,6 @@ class Calculator extends Component {
   render() {
     return (
       <div>
-          <pre>{JSON.stringify(this.state, null, 2)}</pre>
           <div> {this.state.expression} </div>
           <div className='row'>
             <button className = 'number' onClick = {() => this.onClickDigit(1)}>1</button>
@@ -93,7 +92,6 @@ class Calculator extends Component {
             <button className = 'number' onClick = {() => this.onClickDigit(3)}>3</button>
             <button className = 'number' onClick = {() => this.onClickDigit(4)}>4</button>
             <button className = 'operator' onClick = {() => this.onClickOperator('+')}>+</button>
-            <button className = 'operator' onClick = {() => this.onClickBracket('(')}>(</button>
           </div>
           <div className='row'>
             <button className = 'number' onClick = {() => this.onClickDigit(5)}>5</button>
@@ -101,7 +99,6 @@ class Calculator extends Component {
             <button className = 'number' onClick = {() => this.onClickDigit(7)}>7</button>
             <button className = 'number' onClick = {() => this.onClickDigit(8)}>8</button>
             <button className = 'operator' onClick = {() => this.onClickOperator('-')}>-</button>
-            <button className = 'operator' onClick = {() => this.onClickBracket(')')}>)</button>
             <button className = 'special' onClick = {() => this.onClickGST()}>GST</button>
           </div>
           <div className='row'>

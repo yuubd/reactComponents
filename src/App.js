@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Reactions from './fb_reactions/Reactions'
 import Calculator from './calculator/Calculator'
+import CalculatorFullExp from './calculatorFullExp/CalculatorFullExp'
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
         <div className="App-intro">
           <Reactions className="reactions"/>
           <Calculator className="calculator"/>
+          <CalculatorFullExp className="calculator"/>
         </div>
       </div>
     );
