@@ -1,0 +1,15 @@
+@mixin size ($width, $height){
+    width: $width;
+    height: $height;
+}
+
+button {
+    @include size(40px, 40px);
+}
+
+.display {
+    background-color: khaki;
+    border-color: #0000;
+    @include size(320px, 40px);
+    margin: auto;
+}
