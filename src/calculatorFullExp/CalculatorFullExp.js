@@ -10,7 +10,6 @@ class CalculatorFullExp extends Component {
   constructor(props) {
     super(props);
     this.oprStack = [];
-    this.expressionArr = [];
     this.postfixArr = new Queue();
     this.state = {
       expression: "0",
@@ -26,7 +25,6 @@ class CalculatorFullExp extends Component {
     this.operator = this.operator.bind(this);
     this.bracket = this.bracket.bind(this);
     this.gst = this.gst.bind(this);
-    this.wrap = this.wrap.bind(this);
     this.cleanExp = this.cleanExp.bind(this);
     this.eval = this.eval.bind(this);
   }
@@ -50,7 +48,6 @@ class CalculatorFullExp extends Component {
     if (initialState) {
       return digit;
     } else if (String(expression).slice(-2) === ") ") {
-      this.expressionArr.push("*");
       this.pushIntoPostfixedArr("*");
       return expression + " * " + digit;
     } else {
@@ -58,7 +55,7 @@ class CalculatorFullExp extends Component {
     }
   }
   dot = () => {
-    const { expression, initialState, canDotGo, operand } = this.state;
+    const { initialState, operand } = this.state;
     if (initialState) {
       this.setState({
         expression: ".",
@@ -70,7 +67,7 @@ class CalculatorFullExp extends Component {
       });
     } else if (String(operand).indexOf(".") === -1) {
       this.setState({
-        expression: canDotGo ? expression + "." : expression,
+        expression: this.dotHelper(),
         initialState: false,
         canDotGo: false,
         waitingForOperand: true,
@@ -80,16 +77,25 @@ class CalculatorFullExp extends Component {
     }
   };
 
+  dotHelper() {
+    const { expression, canDotGo } = this.state;
+    if (canDotGo) {
+      if (String(expression).slice(-2) === ") ") {
+        return expression + "* .";
+      }
+      return expression + ".";
+    }
+    return expression;
+  }
+
   operator = opr => {
     const { expression, waitingForOperand, operand } = this.state;
     if (waitingForOperand) {
       return;
     } else {
       if (operand !== "") {
-        this.expressionArr.push(operand);
         this.pushIntoPostfixedArr(operand);
       }
-      this.expressionArr.push(opr);
       this.pushIntoPostfixedArr(opr);
       this.setState({
         waitingForOperand: true,
@@ -110,7 +116,6 @@ class CalculatorFullExp extends Component {
       operand
     } = this.state;
     if (operand !== "") {
-      this.expressionArr.push(operand);
       this.pushIntoPostfixedArr(operand);
     }
     if (inputBracket === "(" && canOpenBr) {
@@ -139,20 +144,16 @@ class CalculatorFullExp extends Component {
   openBracketHelper() {
     const { initialState, expression } = this.state;
     if (initialState) {
-      this.expressionArr.push("(");
       this.pushIntoPostfixedArr("(");
       return " ( ";
     } else if (
       String(expression).slice(-1) !== " " ||
-      String(expression).slice(-2) === " ) "
+      String(expression).slice(-2) === ") "
     ) {
-      this.expressionArr.push("*");
-      this.expressionArr.push("(");
       this.pushIntoPostfixedArr("*");
       this.pushIntoPostfixedArr("(");
       return expression + " * ( ";
     } else {
-      this.expressionArr.push("(");
       this.pushIntoPostfixedArr("(");
       return expression + " ( ";
     }
@@ -161,15 +162,16 @@ class CalculatorFullExp extends Component {
   closeBracketHelper() {
     const { bracket, expression } = this.state;
     if (bracket > 0) {
-      this.expressionArr.push(")");
       this.pushIntoPostfixedArr(")");
+      this.setState({
+        canDotGo: true
+      });
       return expression + " ) ";
     } else return expression;
   }
 
   cleanExp = () => {
-    this.expressionArr.length = 0;
-    this.expressionArr.length = 0;
+    console.log(this.postfixArr.len());
     this.postfixArr.empty();
     this.oprStack.length = 0;
     this.setState({
@@ -191,22 +193,6 @@ class CalculatorFullExp extends Component {
       this.setState({
         expression: this.expressionHelper(this.state.expression * 1.05)
       });
-  };
-
-  // get rid of this
-  wrap = () => {
-    const { expression, bracket } = this.state;
-    if (bracket === 0) {
-      this.expressionArr.unshift("(");
-      this.expressionArr.push(")");
-      // this.postfixArr.unshift("(");
-      // this.postfixArr.push(")");
-      this.setState({
-        expression: "( " + expression + " )",
-        canDotGo: false,
-        operand: ""
-      });
-    }
   };
 
   delete = () => {
@@ -274,17 +260,23 @@ class CalculatorFullExp extends Component {
         return prevVal / nextVal;
       }
     };
-    const { bracket, expression, operand, waitingForOperand } = this.state;
+    const {
+      bracket,
+      expression,
+      operand,
+      waitingForOperand,
+      resultStatus
+    } = this.state;
     if (
+      // refactor!!
       bracket !== 0 ||
       waitingForOperand ||
       String(expression).slice(-1) === "." ||
-      this.oprStack.length === 0
+      resultStatus
     ) {
       return;
     }
     if (operand !== "") {
-      this.expressionArr.push(operand);
       this.pushIntoPostfixedArr(operand);
     }
     this.cleanStack();
@@ -319,8 +311,6 @@ class CalculatorFullExp extends Component {
   };
 
   setArrs = res => {
-    this.expressionArr.length = 0;
-    this.expressionArr.push(res);
     //this.postfixArr.length = 0;
     //this.postfixArr.enq(res);
     this.oprStack.length = 0;
@@ -345,11 +335,10 @@ class CalculatorFullExp extends Component {
   render() {
     return (
       <div>
+        <div className="display">{this.state.expression}</div>
         <pre>{JSON.stringify(this.state, null, 2)}</pre>
         <pre>oprStack = {JSON.stringify(this.oprStack, null, 2)}</pre>
-        <pre>expressionArr = {JSON.stringify(this.expressionArr, null, 2)}</pre>
         <pre>postfixArr = {JSON.stringify(this.postfixArr, null, 2)}</pre>
-        <div className="display">{this.state.expression}</div>
         <div className="row">
           <Digit digitFn={() => this.addAnDigit(1)} idAndVal="1" />
           <Digit digitFn={() => this.addAnDigit(2)} idAndVal="2" />
@@ -357,7 +346,6 @@ class CalculatorFullExp extends Component {
           <Digit digitFn={() => this.addAnDigit(4)} idAndVal="4" />
           <Operator oprFn={() => this.operator("+")} idAndVal="+" />
           <Bracket bracketFn={() => this.bracket("(")} idAndVal="(" />
-          <Etc function={() => this.wrap()} idAndVal="wrap" />
           <Etc function={() => this.delete()} idAndVal="<" />
         </div>
         <div className="row">
