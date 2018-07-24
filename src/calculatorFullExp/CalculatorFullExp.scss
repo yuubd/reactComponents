@@ -1,15 +1,34 @@
-@mixin size ($width, $height){
-    width: $width;
-    height: $height;
-}
-
-button {
-    @include size(40px, 40px);
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
 }
 
 .display {
-    background-color: khaki;
-    border-color: #0000;
-    @include size(320px, 40px);
-    margin: auto;
+  background-color: #fee8f5;
+  border-color: #0000;
+  @include size(280px, 25px);
+  margin: auto;
+  font-size: 20px;
+  font-weight: 100;
+}
+
+.button {
+  @include size(40px, 30px);
+  border: 1px, #ffffff;
+  border-color: #ffffff;
+  background: #fee8f5;
+  outline: none;
+  font-size: 10px;
+  font-weight: 100;
+  padding: 0px 0px 0px 0px;
+  &:hover {
+    background-color: #fddef0;
+  }
+}
+.button:focus,
+button:active {
+  width: 39px;
+  height: 28px;
+  border: 5px;
+  padding: 0px 0px 0px 0px;
 }

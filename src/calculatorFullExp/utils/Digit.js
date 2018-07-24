@@ -1,15 +1,14 @@
-import React, { Component } from "react";
+import React from 'react';
 
-class Digit extends Component {
-  render() {
-    return (
-      <input
-        type="button"
-        id={this.props.idAndVal}
-        onClick={this.props.digitFn}
-        value={this.props.idAndVal}
-      />
-    );
-  }
-}
+const Digit = (props) => {
+	return (
+		<input
+			className="button"
+			type="button"
+			id={props.idAndVal}
+			onClick={props.digitFn}
+			value={props.idAndVal}
+		/>
+	);
+};
 export default Digit;
