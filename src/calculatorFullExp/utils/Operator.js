@@ -1,16 +1,15 @@
-import React, { Component } from "react";
+import React from 'react';
 
-class Operator extends Component {
-  render() {
-    return (
-      <input
-        className="button"
-        type="button"
-        id={this.props.idAndVal}
-        onClick={this.props.oprFn}
-        value={this.props.idAndVal}
-      />
-    );
-  }
-}
+const Operator = (props) => {
+	return (
+		<input
+			className="button"
+			type="button"
+			id={props.idAndVal}
+			onClick={props.oprFn}
+			value={props.idAndVal}
+		/>
+	);
+};
+
 export default Operator;

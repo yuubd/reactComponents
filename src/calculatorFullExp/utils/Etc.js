@@ -1,16 +1,15 @@
-import React, { Component } from "react";
+import React from 'react';
 
-class Etc extends Component {
-  render() {
-    return (
-      <input
-        className="button"
-        type="button"
-        id={this.props.idAndVal}
-        onClick={this.props.function}
-        value={this.props.idAndVal}
-      />
-    );
-  }
-}
+const Etc = (props) => {
+	return (
+		<input
+			className="button"
+			type="button"
+			id={props.idAndVal}
+			onClick={props.function}
+			value={props.idAndVal}
+		/>
+	);
+};
+
 export default Etc;
