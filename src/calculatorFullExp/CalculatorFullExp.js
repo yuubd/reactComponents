@@ -32,8 +32,6 @@ class CalculatorFullExp extends Component {
 		this.cleanExp = this.cleanExp.bind(this);
 		this.evaluate = this.evaluate.bind(this);
 		this.undo = this.undo.bind(this);
-
-		this.lastExpStr = this.state.expression;
 	}
 
 	componentDidUpdate(prevProps, prevState) {
