@@ -32,6 +32,8 @@ class CalculatorFullExp extends Component {
 		this.cleanExp = this.cleanExp.bind(this);
 		this.evaluate = this.evaluate.bind(this);
 		this.undo = this.undo.bind(this);
+
+		this.lastExpStr = this.state.expression;
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -44,15 +46,21 @@ class CalculatorFullExp extends Component {
 
 	addAnDigit = (digit) => {
 		const { operand } = this.state;
-		this.setState({
-			expression: this.digitHelper(digit),
-			waitingForOperand: false,
-			initialState: false,
-			canDotGo: true,
-			canOpenBr: true,
-			operand: String(operand) + digit,
-			resultStatus: false
-		});
+		this.setState(
+			{
+				expression: this.digitHelper(digit),
+				waitingForOperand: false,
+				initialState: false,
+				canDotGo: true,
+				canOpenBr: true,
+				operand: String(operand) + digit,
+				resultStatus: false
+			},
+			() => {
+				console.log('expression is ' + this.state.expression);
+				console.log('constant is ' + this.lastExpStr);
+			}
+		);
 	};
 	/** 
 	* add * if a digit is added after ) 
