@@ -32,6 +32,9 @@ class CalculatorFullExp extends Component {
 		this.cleanExp = this.cleanExp.bind(this);
 		this.evaluate = this.evaluate.bind(this);
 		this.undo = this.undo.bind(this);
+		this.lastCharOfExp = () => {
+			return String(this.state.expression).slice(-1);
+		};
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -44,30 +47,21 @@ class CalculatorFullExp extends Component {
 
 	addAnDigit = (digit) => {
 		const { operand } = this.state;
-		this.setState(
-			{
-				expression: this.digitHelper(digit),
-				waitingForOperand: false,
-				initialState: false,
-				canDotGo: true,
-				canOpenBr: true,
-				operand: String(operand) + digit,
-				resultStatus: false
-			},
-			() => {
-				console.log('expression is ' + this.state.expression);
-				console.log('constant is ' + this.lastExpStr);
-			}
-		);
+		this.setState({
+			expression: this.digitHelper(digit),
+			waitingForOperand: false,
+			initialState: false,
+			canDotGo: true,
+			canOpenBr: true,
+			operand: String(operand) + digit,
+			resultStatus: false
+		});
 	};
-	/** 
-	* add * if a digit is added after ) 
-	*/
+	// add * if a digit is added after )
 	digitHelper = (digit) => {
 		const { expression, initialState } = this.state;
-		if (initialState) {
-			return digit;
-		} else if (String(expression).slice(-1) === ')') {
+		if (initialState) return digit;
+		if (this.lastCharOfExp() === ')') {
 			this.pushIntoPostfixedArr('*');
 			return expression + '×' + digit;
 		} else {
@@ -100,9 +94,7 @@ class CalculatorFullExp extends Component {
 	dotHelper = () => {
 		const { expression, canDotGo } = this.state;
 		if (canDotGo) {
-			if (String(expression).slice(-1) === ')') {
-				return expression + '×.';
-			}
+			if (this.lastCharOfExp() === ')') return expression + '×.';
 			return expression + '.';
 		}
 		return expression;
@@ -110,31 +102,22 @@ class CalculatorFullExp extends Component {
 
 	operator = (opr) => {
 		const { expression, waitingForOperand, operand } = this.state;
-		if (waitingForOperand) {
-			return;
-		} else {
-			if (operand !== '') {
-				this.pushIntoPostfixedArr(operand);
-			}
-			this.pushIntoPostfixedArr(opr);
-			this.setState({
-				waitingForOperand: true,
-				expression: expression + opr,
-				operand: '',
-				canDotGo: true,
-				canOpenBr: true
-			});
+		if (waitingForOperand) return;
+		if (operand !== '') {
+			this.pushIntoPostfixedArr(operand);
 		}
+		this.pushIntoPostfixedArr(opr);
+		this.setState({
+			waitingForOperand: true,
+			expression: expression + opr,
+			operand: '',
+			canDotGo: true,
+			canOpenBr: true
+		});
 	};
 
 	bracket = (inputBracket) => {
-		const {
-			bracket,
-			expression,
-			waitingForOperand,
-			canOpenBr,
-			operand
-		} = this.state;
+		const { bracket, waitingForOperand, canOpenBr, operand } = this.state;
 		if (operand !== '') {
 			this.pushIntoPostfixedArr(operand);
 		}
@@ -148,7 +131,7 @@ class CalculatorFullExp extends Component {
 				operand: ''
 			});
 		} else {
-			if (!waitingForOperand && String(expression).slice(-1) !== '(')
+			if (!waitingForOperand && this.lastCharOfExp() !== '(')
 				this.setState(() => {
 					return {
 						bracket: bracket > 0 ? bracket - 1 : bracket,
@@ -161,13 +144,12 @@ class CalculatorFullExp extends Component {
 	};
 	openBracketHelper = () => {
 		const { initialState, expression } = this.state;
+		const shouldMultiplyGo =
+			this.lastCharOfExp() <= 9 || this.lastCharOfExp() === ')';
 		if (initialState) {
 			this.pushIntoPostfixedArr('(');
 			return '(';
-		} else if (
-			String(expression).slice(-1) <= 9 ||
-			String(expression).slice(-1) === ')'
-		) {
+		} else if (shouldMultiplyGo) {
 			this.pushIntoPostfixedArr('*');
 			this.pushIntoPostfixedArr('(');
 			return expression + '×(';
@@ -204,9 +186,7 @@ class CalculatorFullExp extends Component {
 	};
 
 	gst = () => {
-		const expression = this.state;
-		var lastChar = parseFloat(String(expression).slice(-1));
-		if (typeof lastChar === 'number')
+		if (this.state.resultStatus)
 			this.setState({
 				expression: this.expressionHelper(this.state.expression * 1.05)
 			});
@@ -221,17 +201,15 @@ class CalculatorFullExp extends Component {
 	 * 									in the postfixArr, so the operand is ''.
 	*/
 	undo = () => {
+		const { oprStack, resultStatus, postfixArr } = this.state;
 		const history = this.history.stateHistory;
 		const index = history.length - 1;
 		const lastHistory = history[index];
 		const oprArr = ')(+-×÷';
-		const isUndoingStringOpr =
-			oprArr.indexOf(String(this.state.expression).slice(-1)) !== -1;
+		const isUndoingOpr = oprArr.indexOf(this.lastCharOfExp()) !== -1;
 		const isOprInOprStack =
-			convertToProperOpr(String(this.state.expression).slice(-1)) ===
-			String(this.state.oprStack).slice(-1);
-
-		if (index >= 0 && !this.state.resultStatus) {
+			convertToProperOpr(this.lastCharOfExp()) === String(oprStack).slice(-1);
+		if (index >= 0 && !resultStatus) {
 			this.setState((prevState) => {
 				return {
 					expression: lastHistory.expression,
@@ -243,16 +221,16 @@ class CalculatorFullExp extends Component {
 					resultStatus: lastHistory.resultStatus
 				};
 			});
-			if (isUndoingStringOpr) {
+			if (isUndoingOpr) {
 				this.setState((prevState) => {
 					return {
 						operand: '',
 						oprStack: isOprInOprStack
-							? this.state.oprStack.slice(0, -1)
+							? oprStack.slice(0, -1)
 							: lastHistory.oprStack,
 						postfixArr: isOprInOprStack
 							? lastHistory.postfixArr
-							: this.state.postfixArr.slice(0, -1)
+							: postfixArr.slice(0, -1)
 					};
 				});
 			} else {
@@ -309,18 +287,11 @@ class CalculatorFullExp extends Component {
    * the end of expression is number,
    */
 	evaluate = () => {
-		const operationArr = operations;
-		const {
-			bracket,
-			expression,
-			operand,
-			waitingForOperand,
-			oprStack
-		} = this.state;
+		const { bracket, operand, waitingForOperand, oprStack } = this.state;
 		const shouldEvaluate =
 			bracket === 0 &&
 			!waitingForOperand &&
-			String(expression).slice(-1) !== '.' &&
+			this.lastCharOfExp() !== '.' &&
 			this.state.postfixArr.length !== 0;
 		if (shouldEvaluate) {
 			if (operand !== '') {
@@ -333,12 +304,12 @@ class CalculatorFullExp extends Component {
 			var curr, opr1, opr2, result;
 			while (this.state.postfixArr.length !== 0) {
 				curr = this.state.postfixArr.shift();
-				if (!operationArr[curr]) {
+				if (!operations[curr]) {
 					oprStack.push(curr);
 				} else {
 					opr1 = parseFloat(oprStack.pop());
 					opr2 = parseFloat(oprStack.pop());
-					result = operationArr[curr](opr2, opr1);
+					result = operations[curr](opr2, opr1);
 					oprStack.push(result);
 				}
 			}
@@ -356,18 +327,18 @@ class CalculatorFullExp extends Component {
 		return;
 	};
 	cleanStack = () => {
-		while (this.state.oprStack.length !== 0) {
-			var temp = this.state.oprStack.pop();
-			if (temp !== '(' && temp !== ')') this.state.postfixArr.push(temp);
+		const { oprStack, postfixArr } = this.state;
+		while (oprStack.length !== 0) {
+			var temp = oprStack.pop();
+			if (temp !== '(' && temp !== ')') postfixArr.push(temp);
 		}
 	};
 	/* shorthen the result to 2 decimal points */
 	expressionHelper = (exp) => {
-		var StrExp = String(exp);
-		if (StrExp.indexOf('.') !== -1) {
-			return StrExp.substring(0, StrExp.indexOf('.') + 3);
-		}
-		return StrExp;
+		var expression = String(exp);
+		if (expression.indexOf('.') !== -1)
+			return expression.substring(0, expression.indexOf('.') + 3);
+		return expression;
 	};
 
 	render() {
