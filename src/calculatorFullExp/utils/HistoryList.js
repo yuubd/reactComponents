@@ -2,11 +2,7 @@ function HistoryList() {
 	this.stateHistory = [];
 }
 
-HistoryList.prototype.pushHistory = function(
-	stateHistory,
-	oprStackHistory,
-	postfixArrHistory
-) {
+HistoryList.prototype.pushHistory = function(stateHistory) {
 	var lastIndex = this.stateHistory.length;
 	this.stateHistory.push(stateHistory);
 	console.log('last index is ' + lastIndex);

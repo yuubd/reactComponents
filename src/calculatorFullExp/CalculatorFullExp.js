@@ -25,7 +25,8 @@ class CalculatorFullExp extends Component {
 			oprStack: [],
 			postfixArr: []
 		};
-		this.addAnDigit = this.addAnDigit.bind(this);
+		this.addOneDigit = this.addOneDigit.bind(this);
+		this.digitHelper = this.digitHelper.bind(this);
 		this.operator = this.operator.bind(this);
 		this.bracket = this.bracket.bind(this);
 		this.gst = this.gst.bind(this);
@@ -45,7 +46,7 @@ class CalculatorFullExp extends Component {
 		this.shouldSaveHistory = true;
 	}
 
-	addAnDigit = (digit) => {
+	addOneDigit = (digit) => {
 		const { operand } = this.state;
 		this.setState({
 			expression: this.digitHelper(digit),
@@ -142,10 +143,12 @@ class CalculatorFullExp extends Component {
 				});
 		}
 	};
+
 	openBracketHelper = () => {
 		const { initialState, expression } = this.state;
 		const shouldMultiplyGo =
 			this.lastCharOfExp() <= 9 || this.lastCharOfExp() === ')';
+		console.log(this.lastCharOfExp());
 		if (initialState) {
 			this.pushIntoPostfixedArr('(');
 			return '(';
@@ -209,6 +212,7 @@ class CalculatorFullExp extends Component {
 		const isUndoingOpr = oprArr.indexOf(this.lastCharOfExp()) !== -1;
 		const isOprInOprStack =
 			convertToProperOpr(this.lastCharOfExp()) === String(oprStack).slice(-1);
+		console.log(index);
 		if (index >= 0 && !resultStatus) {
 			this.setState((prevState) => {
 				return {
@@ -346,28 +350,28 @@ class CalculatorFullExp extends Component {
 			<div>
 				<pre>{JSON.stringify(this.state, null, 2)}</pre>
 				<Display value={this.state.expression} />
-				<div className="row">
-					<Digit digitFn={() => this.addAnDigit(1)} idAndVal="1" />
-					<Digit digitFn={() => this.addAnDigit(2)} idAndVal="2" />
-					<Digit digitFn={() => this.addAnDigit(3)} idAndVal="3" />
-					<Digit digitFn={() => this.addAnDigit(4)} idAndVal="4" />
+				<div className="row1">
+					<Digit digitFn={() => this.addOneDigit(1)} idAndVal="1" />
+					<Digit digitFn={() => this.addOneDigit(2)} idAndVal="2" />
+					<Digit digitFn={() => this.addOneDigit(3)} idAndVal="3" />
+					<Digit digitFn={() => this.addOneDigit(4)} idAndVal="4" />
 					<Operator oprFn={() => this.operator('+')} idAndVal="+" />
 					<Bracket bracketFn={() => this.bracket('(')} idAndVal="(" />
 					<Etc function={() => this.undo()} idAndVal="undo" />
 				</div>
-				<div className="row">
-					<Digit digitFn={() => this.addAnDigit(5)} idAndVal="5" />
-					<Digit digitFn={() => this.addAnDigit(6)} idAndVal="6" />
-					<Digit digitFn={() => this.addAnDigit(7)} idAndVal="7" />
-					<Digit digitFn={() => this.addAnDigit(8)} idAndVal="8" />
+				<div className="row2">
+					<Digit digitFn={() => this.addOneDigit(5)} idAndVal="5" />
+					<Digit digitFn={() => this.addOneDigit(6)} idAndVal="6" />
+					<Digit digitFn={() => this.addOneDigit(7)} idAndVal="7" />
+					<Digit digitFn={() => this.addOneDigit(8)} idAndVal="8" />
 					<Operator oprFn={() => this.operator('-')} idAndVal="-" />
 					<Bracket bracketFn={() => this.bracket(')')} idAndVal=")" />
 					<Etc function={() => this.gst()} idAndVal="gst" />
 				</div>
-				<div className="row">
+				<div className="row3">
 					<Etc function={() => this.cleanExp()} idAndVal="c" />
-					<Digit digitFn={() => this.addAnDigit(0)} idAndVal="0" />
-					<Digit digitFn={() => this.addAnDigit(9)} idAndVal="9" />
+					<Digit digitFn={() => this.addOneDigit(0)} idAndVal="0" />
+					<Digit digitFn={() => this.addOneDigit(9)} idAndVal="9" />
 					<Etc function={() => this.dot()} idAndVal="." />
 					<Operator oprFn={() => this.operator('×')} idAndVal="×" />
 					<Operator oprFn={() => this.operator('÷')} idAndVal="÷" />

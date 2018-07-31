@@ -11,11 +11,11 @@ Queue.prototype.deq = function() {
 };
 
 Queue.prototype.empty = function() {
-	//for (var i = 0; i < this.q.length; i++)
-	this.q.pop();
+	for (var i = 0; i < this.q.length; i++) this.q.pop();
 };
 Queue.prototype.len = function() {
 	return this.q.length;
 };
 
 export default Queue;
+[];
